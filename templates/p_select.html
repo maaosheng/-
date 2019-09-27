@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/bootstrap1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
+    <style>
+        .hid {
+            display: none;
+        }
+
+        .MyCover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.5;
+            z-index: 999;
+
+        }
+
+        .MyModel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 300px;
+            background-color: white;
+            z-index: 1000;
+            margin-top: -150px;
+            margin-left: -250px;
+
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .Myedit {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 300px;
+            background-color: white;
+            z-index: 1000;
+            margin-top: -150px;
+            margin-left: -250px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="MyCover hid"></div>
+<div class="MyModel hid">
+    <label for="">
+        出版社：
+        <input type="text" name="name" class="Myname">
+    </label>
+    <input type="submit" value="提交" onclick="AjaxSend();">
+    <span></span>
+</div>
+<div class="Myedit hid">
+    <label for="">
+        <input type="text" class="My_id" style="display: none">
+        出版社：
+        <input type="text" name="name" class="Myedit_name">
+    </label>
+    <input type="submit" value="提交" class="send">
+    <span></span>
+
+</div>
+<div style="  width:700px;margin:0 auto">
+    <div style="margin: 10px 0 ">
+        <h3 class="btn btn-primary btn-sm"><a href="/p_add/" style="font-size: 30px;color: black">点击添加一行</a></h3>
+        <h4 class="MyAdd btn btn-success">添加一行</h4>
+    </div>
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>ID</th>
+            <th>出版社</th>
+            <th style="text-align: center">操作</th>
+            <th style="text-align: center">操作</th>
+            <th style="text-align: center">操作</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for foo in  ret %}
+            <tr>
+                <td>1</td>
+                <td>{{ foo.id }}</td>
+                <td>{{ foo.name }}</td>
+                <td><a href="/p_edit/?id={{ foo.id }}" class="glyphicon glyphicon-pencil">123</a></td>
+                <td class="edit">文字编辑</td>
+                <td><a href="/p_delete/?id={{ foo.id }}">删除</a></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+<script src="/static/jquery-3.2.1.min.js"></script>
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+<script>
+    $(".MyAdd").on('click', function () {
+        $(".MyCover").removeClass('hid');
+        $(".MyModel").removeClass('hid')
+    });
+
+    function AjaxSend() {
+        $.ajax({
+            url: '/model/',
+            type: 'POST',
+            data: {'title': $(".Myname").val()},
+            success: function (data) {
+                //当服务端处理完成后，返回数据时，该函数自动调用
+                if (data == 'ok') {
+                    location.href = "/p_select/"
+                }
+                else {
+                    $('span').text(data)
+                }
+            }
+        });
+    }
+
+    $(".edit").on('click', function () {
+        $(".MyCover").removeClass('hid');
+        $(".Myedit").removeClass('hid');
+        var $t = $(this).prevAll();
+        var name1 = $($t[1]).text();
+        var id1 = $($t[2]).text();
+        $(".My_id").val(id1);
+        $(".Myedit_name").val(name1)
+    });
+
+    $(".send").on('click', function () {
+        console.log('123');
+        $.ajax({
+            url: '/edit/',
+            type: 'POST',
+            data: {
+                'name': $(".Myedit_name").val(),
+                'id': $(".My_id").val()
+            },
+            success: function (data) {
+                console.log(data);
+                var req = JSON.parse(data);
+                if (req['status']) {
+                    location.reload()
+                } else {
+                    $("span").text(req['ERROR'])
+                }
+
+
+            }
+        })
+    });
+
+    {#$(".MySend").on('click',function () {#}
+    {#    $.ajax({#}
+    {#    url:"/mymodel/",#}
+    {#    type:'POST',#}
+    {#    data:{'title':$("Myname").val()},#}
+    {#    success:function (data) {#}
+    {#        //当服务端处理完成后，返回数据时，该函数自动调用#}
+    {#        console.log(data)#}
+    {#    }#}
+    {#    }#}
+    {##}
+    {#)#}
+
+</script>
+</body>
+</html>

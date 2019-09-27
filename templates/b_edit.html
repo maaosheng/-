@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/bootstrap1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+<h1>点击添加一行数据</h1>
+<form action="/b_edit/" method="post">
+    <label for="">
+        <input type="text"  name="id" style="display: none;" value={{ b_id }}>
+        书籍名:
+        <input type="text" name="b_name" value={{ b_ret }}>
+        出版社：
+        <select name="select" id="">
+            <option value="">请选择</option>
+            {% for foo in  p_res %}
+                {
+                {% if b_push == foo.id %}
+                     <option  selected value={{ foo.id }}>{{ foo.name }}</option>
+                {% else %}
+                     <option value={{ foo.id }}>{{ foo.name }}</option>
+                {% endif %}
+
+            {% endfor %}
+            
+        </select>
+    </label>
+    <p><input type="submit" value="提交"></p>
+</form>
+
+{#<script src="jquery-3.2.1.min.js"></script>#}
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+</body>
+</html>

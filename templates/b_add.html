@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+    <title>Title</title>
+</head>
+<body>
+<h1>添加一行数据</h1>
+<form action="/b_add/" method="post">
+    <label for="">
+        书籍名：
+        <input type="text" name="b_name" >
+        出版社：
+        <select name="select" id="">
+            <option value="">请选择出版社</option>
+            {% for foo in res %}
+                <option value={{ foo.id }}>{{ foo.name }}</option>
+            {% endfor %}
+
+        </select>
+
+    </label>
+    <p><input type="submit" value="提交"></p>
+    <p style="color:red;font-size: 30px">{{ error }}</p>
+</form>
+
+{#<script src="jquery-3.2.1.min.js"></script>#}
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+</body>
+</html>

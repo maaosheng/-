@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+    <title>b_select</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .hid {
+            display: none;
+        }
+
+        #father {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            background-color: black;
+            opacity: 0.4;
+        }
+
+        #shadow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background-color: white;
+            width: 300px;
+            height: 250px;
+            margin-top: -150px;
+            margin-left: -200px;
+        }
+        #edit_shadow{
+               position: fixed;
+            top: 50%;
+            left: 50%;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            background-color: white;
+            width: 300px;
+            height: 250px;
+            margin-top: -150px;
+            margin-left: -200px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="father" class="hid"></div>
+<div id="shadow" class="hid">
+    <p><label for="">
+        书籍：
+        <input type="text" class="name_add">
+    </label></p>
+    <span style="color:red"></span>
+    <p><label for="">
+        出版社:
+        <select name="" id="" class="select1">
+            {% for foo in p_obj %}
+                <option value={{ foo.id }}>{{ foo.name }}</option>
+            {% endfor %}
+
+        </select>
+    </label></p>
+
+    <p><label for="">
+        <input type="submit" value='提交' class="send">
+    </label></p>
+
+</div>
+<div id="edit_shadow" class="hid">
+    <p><label for="">
+        <input type="text" class="edit_id" style="display: none;">
+        书籍：
+        <input type="text" class="edit_name">
+    </label></p>
+    <span style="color:red"></span>
+    <p><label for="">
+        出版社:
+        <select name="" id="" class="select2">
+            <option value="0"></option>
+            {% for foo in p_obj %}
+                <option value={{ foo.id }}>{{ foo.name }}</option>
+            {% endfor %}
+
+        </select>
+    </label></p>
+
+    <p><label for="">
+        <input type="submit" value='提交' class="send1">
+    </label></p>
+</div>
+<h1><a href="/b_add/">点击添加一行</a></h1>
+<h4 class="Myadd">使用<a>AJAX</a>添加一行数据</h4>
+<table border="1">
+    <thead>
+    <tr>
+        <td>编号</td>
+        <td>ID</td>
+        <td>书籍</td>
+        <td>出版社</td>
+        <td>#</td>
+        <td>#</td>
+        <td>#</td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for foo in ret %}
+        <tr>
+            <td>1</td>
+            <td>{{ foo.id }}</td>
+            <td>{{ foo.name }}</td>
+            <td class="hid">{{ foo.pushier.id }}</td>
+            <td>{{ foo.pushier.name }}</td>
+            <td><a href="/b_edit/?id={{ foo.id }}">编辑</a></td>
+            <td class="edit">文本编辑</td>
+            <td><a href="/b_delete/?id={{ foo.id }}">删除</a></td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+<script src="/static/jquery-3.2.1.min.js"></script>
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+<script>
+    $(".Myadd").on('click', function () {
+        $("#father ").removeClass('hid');
+        $("#shadow").removeClass('hid')
+    });
+    $('.send').on('click', function () {
+        alert('123');
+        $.ajax({
+            url: '/b_myadd/',
+            type: 'POST',
+            data: {
+                'name': $(".name_add").val(),
+                'id': $(".select1").val()
+            },
+            success: function (data) {
+                var req = JSON.parse(data);
+                if (req['status']) {
+                    location.reload()
+                } else {
+                    $('span').text(req['ERROR'])
+                }
+            }
+        })
+    });
+    $(".edit").on('click',function () {
+        $("#father ").removeClass('hid');
+        $("#edit_shadow").removeClass('hid');
+        var $t = $(this).prevAll();
+        console.log($t);
+        $(".edit_name").val($($t[3]).text());
+        $(".edit_id").val($($t[4]).text());
+        $(".select2").val($($t[2]).text())
+    });
+    $(".send1").on('click',function () {
+        $.ajax({
+            url:'/b_myedit/',
+            type:'POST',
+            data:{'name':$(".edit_name").val(),
+            'p_id':$(".select2").val(),
+            'b_id':$('.edit_id').val()},
+            success:function (data) {
+                var req = JSON.parse(data);
+                if (req['status']){
+                    location.reload()
+                }else{
+                    $("span").text(req['ERROR'])
+                }
+            }
+
+        })
+    })
+
+</script>
+</body>
+</html>

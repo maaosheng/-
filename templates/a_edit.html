@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+    <title>Title</title>
+</head>
+<body>
+<h1>修改数据</h1>
+<form action="/a_edit/" method="post">
+    <p><label for="">
+        <input type="text" name="a_id" style="display: none" value={{ a_id }}>
+        书籍：
+        <input type="text" name="b_name" value={{ name }}>
+    </label></p>
+    <p>
+        <label for="">
+            <select name="select" id="" multiple>
+                {% for foo in ret %}
+                    {% if foo in res.book.all %}
+                         <option selected value={{ foo.id }}>{{ foo.name }}</option>
+                    {% endif %}
+                    <option value={{ foo.id }}>{{ foo.name }}</option>
+                {% endfor %}
+
+            </select>
+        </label>
+    </p>
+    <p>
+        <label for="">
+            <input type="submit" value="提交">
+        </label>
+    </p>
+</form>
+{#<script src="jquery-3.2.1.min.js"></script>#}
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+</body>
+</html>

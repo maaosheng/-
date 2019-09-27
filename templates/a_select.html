@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+    <style>
+        .hid{
+            display: none;
+        }
+        .MyCover{
+            position: fixed;
+            top:0;
+            left:0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.5;
+            z-index:999;
+
+        }
+        .MyModel{
+            position: fixed;
+            top: 50%;
+            left:50%;
+            width:400px;
+            height: 300px;
+            background-color: white;
+            z-index: 1000;
+            margin-top:-150px;
+            margin-left: -250px;
+
+        }
+    </style>
+    <title>Title</title>
+
+</head>
+<body>
+<div class="MyCover hid"></div>
+<div class="MyModel hid">
+    <label for="">
+        作者：
+        <input type="text" class="add_name">
+
+    </label>
+    <label for="">
+        <select name="select" id="" class="select1" multiple>
+            {% for foo in b_obj %}
+                <option value={{ foo.id }}>{{ foo.name }}</option>
+
+            {% endfor %}
+
+        </select>
+    </label>
+    <p><span style="color:red"></span></p>
+    <p><input type="submit" value="提交" class="add_send"></p>
+</div>
+<h1><a href="/a_add/">点击添加数据</a></h1>
+<a  href="" class="ajax_add">ajax添加数据</a>
+<table border="1">
+    <thead>
+    <tr>
+        <th>编号</th>
+        <th>ID</th>
+        <th>作者</th>
+        <th>代表书籍</th>
+        <th>#</th>
+        <th>#</th>
+    </tr>
+    </thead>
+    <tbody>
+     {% for foo in ret   %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ foo.id }}</td>
+            <td>{{ foo.name }}</td>
+            <td>
+                {% for i in foo.book.all %}
+                        {{ i.name }}&nbsp;&nbsp;| &nbsp;
+                {% endfor %}
+
+                   </td>
+            <td><a href="/a_edit/?id={{ foo.id }}">编辑</a></td>
+            <td><a href="/a_delete/?id={{ foo.id }}">删除</a></td>
+        </tr>
+     {% endfor %}
+
+    </tbody>
+</table>
+<script src="/static/jquery-3.2.1.min.js"></script>
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+<script>
+    $('.ajax_add').on('click',function () {
+        $('.MyCover').removeClass('hid');
+        $('.MyModel').removeClass('hid');
+        return false
+    });
+    $('.add_send').on('click',function () {
+        $.ajax({
+            url:/ajax_add/,
+            type:'POST',
+            dataType:'JSON',
+            traditional:true,
+            data:{
+                'name':$('.add_name').val(),
+                'sid':$('.select1').val()
+            },
+            success:function (data) {
+                if (data.status){
+                    location.reload()
+                }else{
+                    $("span").text(data.error)
+                }
+
+
+            }
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">#}
+    <title>Title</title>
+</head>
+<body>
+<form action="/p_edit/" method="post">
+    <label for="">
+        <input type="text" style="display: none;" name="id" value={{ id }} >
+        出版社:
+        <input type="text" name="p_name" value={{ ret }}>
+        <input type="submit" value="提交">
+    </label>
+</form>
+
+{#<script src="jquery-3.2.1.min.js"></script>#}
+{#<script src="bootstrap/js/bootstrap.min.js"></script>#}
+</body>
+</html>
